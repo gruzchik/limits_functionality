@@ -81,8 +81,9 @@ function createuser()
 	read -p "Please enter a password for user:" NEWPASSWD
 	
 	# approve changes to the system
-	# useradd -s /bin/bash -p ${NEWPASSWD} -d ${NEWHOMEFOLDER} ${NEWUSER}
-	useradd -s /bin/bash -p $(openssl passwd -1 ${NEWPASSWD}) -d ${NEWHOMEFOLDER} ${NEWUSER}
+	#useradd -s /bin/bash -p $(openssl passwd -1 ${NEWPASSWD}) -d ${NEWHOMEFOLDER} ${NEWUSER}
+	useradd -s /bin/bash -d ${NEWHOMEFOLDER} ${NEWUSER}
+	echo ${NEWUSER}:${NEWPASSWD} | chpasswd
 	mkdir -p ${NEWHOMEFOLDER}
 	chown ${NEWUSER}:${NEWUSER} ${NEWHOMEFOLDER}
 	

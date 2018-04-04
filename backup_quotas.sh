@@ -62,18 +62,29 @@ function createuser()
 	
 	done
 	
-	#enter home directory
+	#add home directory
 	flagEnterHome=0
 	
 	while [[ $flagEnterHome != 1 ]]; do
-		read -p "Please enter a home directory for user (/home/backup/*):" NEWHOMEFOLDER
-	
-			if [[ $NEWHOMEFOLDER == /home/backup/* ]]; then
-				echo -e "home directory is user is ${Green} $NEWHOMEFOLDER ${NC}"
+		read -p "Please enter a name of container for user (mvs*) or input NO if this is dedicated server:" NAMECONTAINER
+			if [[ ${NAMECONTAINER} == mvs* ]]; then
+				NEWHOMEFOLDER="/home/backup/${NAMECONTAINER}/$NEWUSER"
+				echo -e "home directory for user is ${Green} $NEWHOMEFOLDER ${NC}"
 				flagEnterHome=1
+			elif [[ ${NAMECONTAINER} == NO ]]; then
+				NEWHOMEFOLDER="/home/backup/$NEWUSER"
+                                echo -e "home directory for user is ${Green} $NEWHOMEFOLDER ${NC}"
+                                flagEnterHome=1
 			else
-				echo -e "Folder ${Yellow} $NEWHOMEFOLDER ${NC} is not correct. Please choose new one"
+				echo -e "Name of container ${Yellow} ${NAMECONTAINER} ${NC} is not correct. Please choose new one"
 			fi
+		#read -p "Please enter a home directory for user (/home/backup/*):" NEWHOMEFOLDER	
+		#	if [[ $NEWHOMEFOLDER == /home/backup/* ]]; then
+		#		echo -e "home directory is user is ${Green} $NEWHOMEFOLDER ${NC}"
+		#		flagEnterHome=1
+		#	else
+		#		echo -e "Folder ${Yellow} $NEWHOMEFOLDER ${NC} is not correct. Please choose new one"
+		#	fi
 	
 	done
 	

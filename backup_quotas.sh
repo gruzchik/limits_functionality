@@ -102,6 +102,11 @@ function createuser()
 	
 }
 
+function updateuser()
+{
+	echo 'new case'
+}
+
 function updatequota()
 {
 
@@ -184,12 +189,13 @@ echo -en "${Cyan}"
 cat << 'EOF'
 Create user (C)
 Delete user (D)
-Update quota (U)
+Update user (U)
+Update quota (Q)
 Show limits for users(repquota  -us /home) (S)
 
 EOF
 echo -en "${NC}"
-#read -p "Please select operations with backup users. Create user(C) Delete user(D) Update quota(U) Show limits for users(S):" opts
+#read -p "Please select operations with backup users. Create user(C) Delete user(D) Update user(U) Update quota(Q) Show limits for users(S):" opts
 read -p "Your choose is: " opts
 
         case "${opts}" in
@@ -203,7 +209,12 @@ read -p "Your choose is: " opts
                         deleteuser
                         exit
                 ;;
-                U | u)
+		U | u)
+		        echo 'Update user'
+			updateuser
+			exit
+			;;
+                Q | q)
                         echo 'Update quota'
                         updatequota
                         exit

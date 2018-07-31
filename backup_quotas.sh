@@ -129,16 +129,17 @@ function updateuser()
 	# select new container
 	read -p "Please enter the name of new container for user(like mvs1):" UPDCONTAINER
 
-	# move content to the new folder
-	OLDHOME=$(cat /etc/passwd | grep ${NEWUSER} | awk -F'': {'print $6'})
-	mv ${OLDHOME} /home/backup/${UPDCONTAINER}/
-	# change home directory for user
-	usermod -d /home/backup/${UPDCONTAINER}/${NEWUSER} ${NEWUSER}
 	# check that new home directory is exists
 	if [ ! -d /home/backup/${UPDCONTAINER}/${NEWUSER} ]; then
 		mkdir -p /home/backup/${UPDCONTAINER}/${NEWUSER}
 		chown -R ${NEWUSER}:${NEWUSER} /home/backup/${UPDCONTAINER}/${NEWUSER}
 	fi
+	# move content to the new folder
+	OLDHOME=$(cat /etc/passwd | grep ${NEWUSER} | awk -F'': {'print $6'})
+	mv ${OLDHOME} /home/backup/${UPDCONTAINER}/
+	# change home directory for user
+	usermod -d /home/backup/${UPDCONTAINER}/${NEWUSER} ${NEWUSER}
+
 	echo -e "The home directory for user ${Yellow} ${NEWUSER} ${NC} has been changed to ${Green} /home/backup/${UPDCONTAINER}/${NEWUSER} ${NC}"
 }
 

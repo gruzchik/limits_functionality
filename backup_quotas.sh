@@ -104,7 +104,42 @@ function createuser()
 
 function updateuser()
 {
-	echo 'new case'
+	echo 'Please find a listing of users below:'
+	cat /etc/passwd| grep mvs
+
+	flagUpdateUser=0
+	while [[ $flagUpdateUser != 1 ]]; do
+		#cat /etc/passwd | awk 'BEGIN{FS=":"}{print $1}'
+		IFEXISTS=0
+		read -p "Please enter the name of user:" NEWUSER
+		# check user to exists in /etc/passwd
+		for line in $(cat /etc/passwd | awk 'BEGIN{FS=":"}{print $1}' |grep $NEWUSER); do
+			if [[ $line == $NEWUSER ]]; then
+				IFEXISTS=1
+			fi
+		done
+
+		if [[ $IFEXISTS != 1 ]]; then
+			echo -e "User ${Yellow} $NEWUSER ${NC} is not exists in /etc/passwd. Please choose another name"
+			continue
+		fi
+		echo -e "update user is ${Green} $NEWUSER ${NC}"
+		flagUpdateUser=1
+	done
+	# select new container
+	read -p "Please enter the name of new container for user(like mvs1):" UPDCONTAINER
+
+	# move content to the new folder
+	OLDHOME=$(cat /etc/passwd | grep ${NEWUSER} | awk -F'': {'print $6'})
+	mv ${OLDHOME} /home/backup/${UPDCONTAINER}/
+	# change home directory for user
+	usermod -d /home/backup/${UPDCONTAINER}/${NEWUSER} ${NEWUSER}
+	# check that new home directory is exists
+	if [ ! -d /home/backup/${UPDCONTAINER}/${NEWUSER} ]; then
+		mkdir -p /home/backup/${UPDCONTAINER}/${NEWUSER}
+		chown -R ${NEWUSER}:${NEWUSER} /home/backup/${UPDCONTAINER}/${NEWUSER}
+	fi
+	echo -e "The home directory for user ${Yellow} ${NEWUSER} ${NC} has been changed to ${Green} /home/backup/${UPDCONTAINER}/${NEWUSER} ${NC}"
 }
 
 function updatequota()
